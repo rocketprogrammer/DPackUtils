@@ -1,0 +1,3 @@
+*.pyc
+unpacked/*.swf
+__pycache__/*
