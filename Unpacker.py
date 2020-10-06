@@ -1,5 +1,5 @@
 from ByteArray import ByteArray
-import os, zlib
+import os, zlib, sys
 
 class Unpacker:
     def __init__(self):
@@ -48,4 +48,4 @@ class Unpacker:
                 file.write(data)
 
 unpacker = Unpacker()
-unpacker.open('libs.dpak')
+unpacker.open(sys.argv[1])
