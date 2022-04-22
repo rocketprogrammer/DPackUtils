@@ -23,7 +23,7 @@ class ByteArray(Exception):
         elif type(buf) == ByteArray:
             buf.setPosition(0)
             self.writeMulitiBytes(buf)
-        elif type(buf)== str:
+        elif type(buf)== bytes:
             self.stream = buf
             self.length = len(buf)
             self.availableSizes = self.length
@@ -172,7 +172,7 @@ class ByteArray(Exception):
     def readMultiByte(self, length):
         bytes = self.__readStream(length)
 
-        return str(bytes)
+        return bytes.decode()
 
     def readMulitiBytes(self, bytes, begin=0, nlen=-1):
         if bytes.length < begin:

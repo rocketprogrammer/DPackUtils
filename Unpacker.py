@@ -43,9 +43,9 @@ class Unpacker:
         for i in range(numFiles):
             data = reader.readBytes(lengths[i])
 
-            with open(self.unpackDir + names[i], 'wb') as file:
-                print('Writing {0} to disk!'.format(names[i]))
-                file.write(data)
+            with open(self.unpackDir + names[i], 'wb') as outDisk:
+                print(f'Writing {names[i]} to disk!')
+                outDisk.write(data)
 
 unpacker = Unpacker()
 unpacker.open(sys.argv[1])
