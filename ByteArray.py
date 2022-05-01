@@ -256,7 +256,7 @@ class ByteArray(Exception):
         self.writeUTFBytes(value)
 
     def writeUTFBytes(self, value):
-        if isinstance(value, unicode):
+        if isinstance(value, str):
             value = value.encode("utf-8")
         buf = self.__packStream("%ds"%len(value), value)
         self.__writeStream(buf)

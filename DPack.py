@@ -1,7 +1,12 @@
 from ByteArray import ByteArray
 import os, zlib, sys
 
-class Unpacker:
+class DPackItem:
+    def __init__(self, itemName: str, itemData: bytes):
+        self.itemName = itemName
+        self.itemData = itemData
+
+class DPack:
     def __init__(self):
         self.magicCode = 1146110283
 
@@ -10,10 +15,20 @@ class Unpacker:
         if not os.path.exists(self.unpackDir):
             os.mkdir(self.unpackDir)
 
-    def open(self, filename):
-        source = open(filename, 'rb').read()
+    def pack(self, itemList: list):
+        writer = ByteArray(b'')
+        writer.writeUnsignedInt(self.magicCode)
+        writer.writeShort(len(itemList))
 
-        data = zlib.decompress(source)
+        for item in itemList:
+            writer.writeUnsignedInt(len(item.itemData))
+            writer.writeUTF(item.itemName)
+            writer.writeBytes(item.itemData)
+
+        return zlib.compress(writer.toByteArray())
+
+    def unpack(self, data: bytes):
+        data = zlib.decompress(data)
 
         reader = ByteArray(data)
 
@@ -47,5 +62,9 @@ class Unpacker:
                 print(f'Writing {names[i]} to disk!')
                 outDisk.write(data)
 
-unpacker = Unpacker()
-unpacker.open(sys.argv[1])
+items = []
+items.append(DPackItem(sys.argv[1], open(sys.argv[1], 'rb').read()))
+
+dPack = DPack()
+res = dPack.pack(items)
+dPack.unpack(res)
