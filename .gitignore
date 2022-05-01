@@ -1,4 +1,4 @@
 *.pyc
-unpacked/*.swf
+unpacked/*
 __pycache__/*
 *.dpak

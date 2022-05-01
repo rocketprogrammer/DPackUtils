@@ -66,5 +66,12 @@ items = []
 items.append(DPackItem(sys.argv[1], open(sys.argv[1], 'rb').read()))
 
 dPack = DPack()
+
+# First, test packing
 res = dPack.pack(items)
+
+# Finally, write out the packed data
+open(sys.argv[2], 'wb').write(res)
+
+# Test unpacking
 dPack.unpack(res)
