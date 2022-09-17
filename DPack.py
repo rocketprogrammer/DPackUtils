@@ -15,7 +15,7 @@ class DPack:
         if not os.path.exists(self.unpackDir):
             os.mkdir(self.unpackDir)
 
-    def pack(self, itemList: list):
+    def pack(self, itemList: list) -> bytes:
         writer = ByteArray(b'')
         writer.writeUnsignedInt(self.magicCode)
         writer.writeShort(len(itemList))
