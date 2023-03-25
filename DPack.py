@@ -62,6 +62,7 @@ class DPack:
                 print(f'Writing {names[i]} to disk!')
                 outDisk.write(data)
 
+"""
 items = []
 items.append(DPackItem(sys.argv[1], open(sys.argv[1], 'rb').read()))
 
@@ -75,3 +76,6 @@ open(sys.argv[2], 'wb').write(res)
 
 # Test unpacking
 dPack.unpack(res)
+"""
+
+DPack().unpack(open(sys.argv[1], 'rb').read())
