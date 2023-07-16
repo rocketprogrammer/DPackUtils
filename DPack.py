@@ -1,4 +1,6 @@
 from ByteArray import ByteArray
+from pathlib import Path
+from lxml import etree
 import os, zlib, sys
 
 class DPackItem:
@@ -8,7 +10,11 @@ class DPackItem:
 
 class DPack:
     def __init__(self):
-        self.magicCode = 1146110283
+        self.magicCodes = [
+            1146110283, # DPack
+            1836597052, # XML
+            1885433148 # XMC (XML)
+        ]
 
         self.unpackDir = 'unpacked/'
 
@@ -27,15 +33,21 @@ class DPack:
 
         return zlib.compress(writer.toByteArray())
 
-    def unpack(self, data: bytes):
-        data = zlib.decompress(data)
+    def unpack(self, file_path: str):
+        data = zlib.decompress(open(file_path, 'rb').read())
 
         reader = ByteArray(data)
 
         magicCode = reader.readUnsignedInt()
 
-        if magicCode != self.magicCode:
-            raise Exception('Magic code invalid!')
+        if magicCode not in self.magicCodes:
+            raise Exception(f'Magic code invalid: {magicCode}!')
+
+        if magicCode in [self.magicCodes[1], self.magicCodes[2]]:
+            # XML file
+            root = etree.fromstring(reader.toByteArray())
+            open(f"unpacked/{Path(file_path).stem}.xml", "wb").write((etree.tostring(root, pretty_print=True)))
+            return
 
         numFiles = reader.readUnsignedShort()
 
@@ -78,4 +90,4 @@ open(sys.argv[2], 'wb').write(res)
 dPack.unpack(res)
 """
 
-DPack().unpack(open(sys.argv[1], 'rb').read())
+DPack().unpack(sys.argv[1])
